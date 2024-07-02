@@ -1,0 +1,48 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>MQTT IoT Control</title>
+    <script src="https://unpkg.com/mqtt/dist/mqtt.min.js"></script>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            text-align: center;
+            margin-top: 50px;
+        }
+        button {
+            padding: 10px 20px;
+            font-size: 16px;
+            margin: 5px;
+        }
+    </style>
+</head>
+<body>
+    <h1>MQTT IoT Control</h1>
+    <button onclick="publishMessage('lamp2/control', 'ON')">ON</button>
+    <button onclick="publishMessage('lamp2/control', 'OFF')">Turn Off Lamp</button>
+
+    <script>
+        // Configuration for MQTT broker
+        const broker = 'broker.emqx.io';
+        const topic = 'lamp2/control';
+
+        // Connect to MQTT broker
+        const client = mqtt.connect(broker);
+
+        client.on('connect', function () {
+            console.log('Connected to MQTT broker');
+        });
+
+        client.on('message', function (topic, message) {
+            console.log('Received message:', topic, message.toString());
+        });
+
+        function publishMessage(topic, message) {
+            client.publish(topic, message);
+            console.log('Published message:', message);
+        }
+    </script>
+</body>
+</html>
